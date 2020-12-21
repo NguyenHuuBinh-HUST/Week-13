@@ -1,0 +1,225 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+//khai bao lop person
+
+class person {
+
+private:
+
+	int id;
+
+	string name;
+
+	string gender;
+
+	person* next;
+
+public:
+
+	person(int _id = 0, string _name = "unknow", string _gender = "unknow", person* _next = NULL) {
+
+		id = _id;
+
+		name = _name;
+
+		gender = _gender;
+
+		next = _next;
+
+	}
+
+	person(const person& per1) {
+
+		id = per1.id;
+
+		name = per1.name;
+
+		gender = per1.gender;
+
+		next = per1.next;
+
+	}
+
+	person& operator = (const person& per2) {
+
+		id = per2.id;
+
+		name = per2.name;
+
+		gender = per2.gender;
+
+		next = per2.next;
+
+		return *this;
+
+	}
+
+	~person() {
+
+		next = NULL;
+
+	}
+
+	void input_pers(int& id, string& name, string& gender)
+
+	{
+
+		cout << "nhap ma dinh danh: "; cin >> id;
+
+		cout << "\n nhap ho ten: ";
+
+		cin.ignore(1); getline(cin, name); cin.ignore(1);
+
+		cout << "\n nhap gioi tinh: ";
+
+		getline(cin, gender);
+
+	}
+
+	void swap(person& pers2) {
+
+		person tmp = *this;
+
+		*this = pers2;
+
+		pers2 = tmp;
+
+	}
+
+	void display() {
+
+		cout << "Person:\n";
+
+		cout << "ID:\t" << id << endl;
+
+		cout << "Name:\t" << name << endl;
+
+		cout << "Gender:\t" << gender << endl;
+
+	}
+
+	friend class listofperson;
+
+};
+
+//khai bao lop danh sach doi tuong person
+
+class listofperson {
+
+	person* firstpers;
+
+public:
+
+	void lopers_Init(listofperson* lofpers) {
+
+		lofpers->firstpers = 0;
+
+	}
+
+	void add_pers(listofperson* lofpers, person& per2); //ham them doi tuong person vao danh sach
+
+	void add_pers_Final_input(listofperson* lofpers); //ham them doi tuong person vao cuoi danh sach
+
+	int lofperson_Length(listofperson* lofpers); //ham them tinh chieu dai danh sach
+
+	void lofpers_Display(listofperson* lofpers); //ham them hien thi cac doi tuong trong danh sach
+
+	person* lofperson_Search(listofperson* lofpers, string name); //ham tim kiem doi tuong trong danh sach theo thuoc tinh ten
+
+	void lofpers_RemoveAfter(person* node); //ham loai bo mot doi tuong sau mot doi tuong khac trong danh sach
+
+	void sortListPerson(listofperson* lofpers); //sap xep theo thu tu có id tang dan
+
+	class student :public person {
+
+		int stuID;
+
+		string clas;
+
+	public:
+
+		student(int _id, string _name, string _gender, person* _next, int _stuID, string _clas) :person(_id, _name, _gender, _next) {
+
+			stuID = _stuID;
+
+			clas = _clas;
+
+		}
+
+		student(const student& stu1) :person(stu1) {
+
+			stuID = stu1.stuID;
+
+			clas = stu1.clas;
+
+		}
+
+		student& operator = (const student& stu2) {
+
+			person::operator=(stu2);
+
+			stuID = stu2.stuID;
+
+			clas = stu2.clas;
+
+			return (*this);
+
+		}
+
+		void display() {
+
+			person::display();
+
+			cout << "student ID:\t" << stuID << endl;
+
+			cout << "Class:\t" << clas << endl;
+
+		}
+
+	};
+
+	int main() {
+
+		person per1(01, "nguyen van a", "male");
+
+		person per2 = per1;
+
+		cout << "thong tin nguoi 2: " << endl;
+
+		per2.display();
+
+		person per3(02, "nguyen van b", "male");
+
+		per3.swap(per2);
+
+		per2.display();
+
+		listofperson lofpers;
+
+		lofpers.lopers_Init(&lofpers);
+
+		lofpers.add_pers(&lofpers, per1);
+
+		lofpers.add_pers(&lofpers, per2);
+
+		lofpers.add_pers(&lofpers, per3);
+
+		lofpers.sortListPerson(&lofpers);
+
+		cout << "\nnoi dung list 1 " << endl;
+
+		lofpers.lofpers_Display(&lofpers);
+
+		student std1(01, "le thi mai", "female", NULL, 0022, "ET4");
+
+		student std2(02, "le thi hoa", "female", NULL, 0023, "ET4");
+
+		std1.display();
+
+		per2 = std1;
+
+		per2.display();
+
+	}
